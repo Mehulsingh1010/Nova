@@ -202,7 +202,7 @@ const Page = () => {
                     className={`flex items-center gap-4 p-4 rounded-xl ${
                       isDarkMode ? 'hover:bg-gray-800' : 'hover:bg-gray-100'
                     } transition-all duration-300`}
-                    onMouseEnter={() => setHoveredBenefit(index)}
+                    
                     onMouseLeave={() => setHoveredBenefit(null)}
                     whileHover={{ scale: 1.05 }}
                   >
