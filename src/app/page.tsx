@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from "next/image";
 import { ChevronDown, ArrowRight, CreditCard, Users, ArrowUpRight, Sun, Moon } from "lucide-react";
 import { motion } from "framer-motion";
@@ -7,6 +7,9 @@ import { motion } from "framer-motion";
 const Page = () => {
   const [hoveredBenefit, setHoveredBenefit] = useState(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [typedText, setTypedText] = useState("");
+  const fullText = "Taake your business to new heights with faster cash flow and clear financial insights all with a free Nova account. Apply in 10 minutes.";
+
 
   const benefits = [
     { icon: <CreditCard className="w-5 h-5" />, text: "Invoice Management" },
@@ -21,15 +24,39 @@ const Page = () => {
     setIsDarkMode(!isDarkMode);
   };
 
+
+  useEffect(() => {
+    let index = 0;
+  
+    const typingInterval = setInterval(() => {
+      console.log(`Current index: ${index}`);
+      if (index < fullText.length) {
+        setTypedText((prev) => {
+          const newText = prev + fullText[index];
+          console.log(`Typed text so far: ${newText}`);
+          
+          return newText;
+          
+        });
+        index++;
+      } else {
+        clearInterval(typingInterval);
+      }
+    }, 50);
+  
+    return () => clearInterval(typingInterval);
+  }, [fullText]);
+  
+
   return (
     <div className={`min-h-screen font-sans overflow-hidden ${
       isDarkMode 
         ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white' 
         : 'bg-white text-gray-900'
     }`}>
-     
+      {/* Header */}
       <header className="container mx-auto px-4 py-6 flex items-center justify-between relative z-10">
-       
+        {/* Logo */}
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-pink-500 rounded-full" />
           <span className={`text-2xl font-bold ${
@@ -39,6 +66,7 @@ const Page = () => {
           }`}>nova</span>
         </div>
 
+        {/* Navigation */}
         <nav className="hidden md:flex space-x-8">
           {navItems.map((item) => (
             <a
@@ -55,7 +83,7 @@ const Page = () => {
           ))}
         </nav>
 
-        
+        {/* Auth Buttons and Theme Switcher */}
         <div className="flex items-center space-x-6">
           <button 
             onClick={toggleTheme}
@@ -75,11 +103,11 @@ const Page = () => {
         </div>
       </header>
 
-    
+      {/* Main Content */}
       <main className="container mx-auto px-4 py-16 relative">
-       
+        {/* Hero Section */}
         <div className="grid md:grid-cols-2 gap-12 items-center">
-       
+          {/* Hero Text */}
           <div className="max-w-xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -95,7 +123,7 @@ const Page = () => {
                 ALL YOUR BUSINESS BANKING IN ONE PLATFORM
               </h1>
               <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} text-lg mb-8`}>
-                Take your business to new heights with faster cash flow and clear financial insights all with a free Nova account. Apply in 10 minutes.
+                {typedText}
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <button className="bg-gradient-to-r from-orange-500 to-pink-500 text-white px-4 py-2 rounded-full font-medium shadow-lg hover:shadow-xl transition-all duration-300 flex items-center space-x-2">
@@ -114,7 +142,7 @@ const Page = () => {
             </motion.div>
           </div>
 
-          
+          {/* Hero Images */}
           <div className="relative grid grid-cols-2 gap-6">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -156,6 +184,8 @@ const Page = () => {
             </motion.div>
           </div>
         </div>
+
+        {/* Benefits Section */}
         <section className="mt-32">
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
@@ -172,7 +202,7 @@ const Page = () => {
                     className={`flex items-center gap-4 p-4 rounded-xl ${
                       isDarkMode ? 'hover:bg-gray-800' : 'hover:bg-gray-100'
                     } transition-all duration-300`}
-                    
+                    onMouseEnter={() => setHoveredBenefit(index)}
                     onMouseLeave={() => setHoveredBenefit(null)}
                     whileHover={{ scale: 1.05 }}
                   >
